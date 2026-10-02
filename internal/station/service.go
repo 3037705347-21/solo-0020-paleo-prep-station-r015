@@ -36,8 +36,17 @@ func (s *Service) nextID(prefix string) string {
 	return prefix + "-" + time.Now().UTC().Format("20060102150405") + "-" + hex.EncodeToString([]byte{byte(local)})
 }
 
+// SnapshotSpecimen 只携带版本核对所需的标本事实，避免在方案快照中
+// 重复暴露整份标本。
+type SnapshotSpecimen struct {
+	ID      string                `json:"id"`
+	Status  domain.SpecimenStatus `json:"status"`
+	Version int                   `json:"version"`
+}
+
 type PlanSnapshot struct {
 	Plan     domain.PrepPlan        `json:"plan"`
+	Specimen SnapshotSpecimen       `json:"specimen"`
 	Progress []domain.ProgressEntry `json:"progress"`
 }
 

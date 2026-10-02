@@ -138,3 +138,10 @@ func (p *PrepPlan) Cancel(now time.Time) error {
 	p.UpdatedAt = now.UTC()
 	return nil
 }
+
+// Touch 记录一次不改变状态、但确实改变方案事实的写入（例如追加进行中的
+// 制备进度）。每次成功写入都必须推进版本，以便乐观并发控制识别并发提交。
+func (p *PrepPlan) Touch(now time.Time) {
+	p.Version++
+	p.UpdatedAt = now.UTC()
+}
