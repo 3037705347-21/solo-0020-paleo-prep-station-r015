@@ -13,10 +13,14 @@ type CreatePlanRequest struct {
 	Method         string `json:"method"`
 	Adhesive       string `json:"adhesive"`
 	TargetExposure int    `json:"target_exposure"`
+	// ExpectedVersion 携带调用方已读取的标本版本；为空时不做版本校验。
+	ExpectedVersion *int `json:"expected_version,omitempty"`
 }
 
 type ApprovalRequest struct {
 	ApprovedBy string `json:"approved_by"`
+	// ExpectedVersion 携带调用方已读取的方案版本；为空时不做版本校验。
+	ExpectedVersion *int `json:"expected_version,omitempty"`
 }
 
 type ProgressRequest struct {
@@ -24,10 +28,14 @@ type ProgressRequest struct {
 	Percent    int    `json:"percent"`
 	Note       string `json:"note"`
 	RecordedBy string `json:"recorded_by"`
+	// ExpectedVersion 携带调用方已读取的方案版本；为空时不做版本校验。
+	ExpectedVersion *int `json:"expected_version,omitempty"`
 }
 
 type ReleaseRequest struct {
 	Purpose    string `json:"purpose"`
 	Recipient  string `json:"recipient"`
 	ApprovedBy string `json:"approved_by"`
+	// ExpectedVersion 携带调用方已读取的标本版本；为空时不做版本校验。
+	ExpectedVersion *int `json:"expected_version,omitempty"`
 }

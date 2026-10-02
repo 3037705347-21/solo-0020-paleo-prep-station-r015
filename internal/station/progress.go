@@ -23,6 +23,9 @@ func (s *Service) LogProgress(
 		if !ok {
 			return notFoundPlan(planID)
 		}
+		if err := requirePlanVersion(request.ExpectedVersion, plan); err != nil {
+			return err
+		}
 		specimen, ok := m.GetSpecimen(plan.SpecimenID)
 		if !ok {
 			return notFoundSpecimen(plan.SpecimenID)

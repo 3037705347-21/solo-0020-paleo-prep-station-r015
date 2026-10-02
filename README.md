@@ -33,6 +33,10 @@ go run ./cmd/paleo-prep-station --addr 127.0.0.1:18133
 - `POST /plans/{id}/progress`
 - `POST /specimens/{id}/release`
 
+## 版本与并发
+
+创建方案、审批、进度和放行的请求体可以携带可选的 `expected_version` 字段，声明调用方已读取的标本或方案版本（创建方案与放行对照标本版本，审批与进度对照方案版本）。版本与服务端不一致时返回 `409` 及 `specimen_version_conflict` 或 `plan_version_conflict`；省略该字段时行为与之前一致。成功写入后，可通过 `GET /specimens/{id}`、`GET /plans/{id}` 和写入响应核对同一次提交的版本事实。
+
 ## 本地验证
 
 每条业务链路都可以独立执行：
@@ -42,6 +46,7 @@ go run ./cmd/workflowcheck --workflow register-specimen
 go run ./cmd/workflowcheck --workflow approve-prep-plan
 go run ./cmd/workflowcheck --workflow log-preparation
 go run ./cmd/workflowcheck --workflow release-for-study
+go run ./cmd/workflowcheck --workflow version-guard
 ```
 
 这些检查会启动临时 HTTP 处理器并调用真实公共路由。

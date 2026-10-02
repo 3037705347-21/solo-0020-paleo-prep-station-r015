@@ -23,6 +23,9 @@ func (s *Service) CreatePlan(
 		if !ok {
 			return notFoundSpecimen(specimenID)
 		}
+		if err := requireSpecimenVersion(request.ExpectedVersion, specimen); err != nil {
+			return err
+		}
 		if m.HasOpenPlan(specimenID) {
 			return contracts.Conflict("open_plan_exists", "该标本已存在未结束的修复方案")
 		}
@@ -63,6 +66,9 @@ func (s *Service) ApprovePlan(
 		plan, ok := m.GetPlan(planID)
 		if !ok {
 			return notFoundPlan(planID)
+		}
+		if err := requirePlanVersion(request.ExpectedVersion, plan); err != nil {
+			return err
 		}
 		specimen, ok := m.GetSpecimen(plan.SpecimenID)
 		if !ok {

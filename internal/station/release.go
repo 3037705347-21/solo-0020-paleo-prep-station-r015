@@ -23,6 +23,9 @@ func (s *Service) ReleaseSpecimen(
 		if !ok {
 			return notFoundSpecimen(specimenID)
 		}
+		if err := requireSpecimenVersion(request.ExpectedVersion, specimen); err != nil {
+			return err
+		}
 		if m.HasOpenPlan(specimenID) {
 			return contracts.Conflict("open_plan_blocks_release", "存在未结束方案，不能办理研究放行")
 		}
